@@ -38,7 +38,7 @@ const C = {
 const UL = ["","LOW","NORMAL","HIGH","URGENT","CRITICAL"];
 const UC = ["",C.dim,C.blue,C.green,C.orange,C.red];
 const FREQS = ["daily","weekdays","weekly"];
-const HOUR_H = 56, CAL_S = 9, CAL_E = 21;
+const HOUR_H = 72, CAL_S = 9, CAL_E = 21;
 const HOURS = Array.from({length:CAL_E-CAL_S},(_,i)=>CAL_S+i);
 const PX = {fontFamily:"'Press Start 2P',monospace"};
 
@@ -143,15 +143,15 @@ function autoSchedule(state){
 
 // ── Shared UI ─────────────────────────────────────────────────────────────────
 const Btn=({onClick,bg=C.blue,tc=C.yellow,children,sx={}})=>(
-  <button onClick={onClick} style={{...PX,background:bg,border:"none",color:tc,fontSize:7,padding:"7px 10px",cursor:"pointer",...sx}}>{children}</button>
+  <button onClick={onClick} style={{...PX,background:bg,border:"none",color:tc,fontSize:10,padding:"7px 10px",cursor:"pointer",...sx}}>{children}</button>
 );
 const Lbl=({t,children})=>(
   <div style={{marginBottom:11}}>
-    <div style={{...PX,fontSize:6,color:C.dim,marginBottom:4}}>{t}</div>
+    <div style={{...PX,fontSize:9,color:C.dim,marginBottom:4}}>{t}</div>
     {children}
   </div>
 );
-const inp = {background:C.bg2,color:C.white,border:`2px solid ${C.blue}`,padding:"5px 7px",fontSize:7,width:"100%",outline:"none",...PX};
+const inp = {background:C.bg2,color:C.white,border:`2px solid ${C.blue}`,padding:"5px 7px",fontSize:10,width:"100%",outline:"none",...PX};
 const Inp = (props) => <input {...props} style={{...inp,...(props.style||{})}}/>;
 const Sel = ({value,onChange,opts}) => (
   <select value={value} onChange={onChange} style={{...inp}}>
@@ -164,8 +164,8 @@ function Modal({title,onClose,children}){
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.92)",zIndex:500,display:"flex",alignItems:"center",justifyContent:"center",padding:12}}>
       <div style={{background:C.bg2,border:`3px solid ${C.blue}`,maxWidth:440,width:"100%",maxHeight:"88vh",overflowY:"auto"}}>
         <div style={{background:C.red,padding:"6px 10px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-          <span style={{...PX,fontSize:8,color:C.yellow}}>{title}</span>
-          <button onClick={onClose} style={{...PX,background:"none",border:"none",color:C.yellow,fontSize:12,cursor:"pointer"}}>✕</button>
+          <span style={{...PX,fontSize:11,color:C.yellow}}>{title}</span>
+          <button onClick={onClose} style={{...PX,background:"none",border:"none",color:C.yellow,fontSize:16,cursor:"pointer"}}>✕</button>
         </div>
         <div style={{padding:14}}>{children}</div>
       </div>
@@ -186,18 +186,18 @@ function TaskForm({init={},onSave,onClose}){
         <Lbl t={`URGENCY: ${UL[f.urgency]}`}>
           <div style={{display:"flex",alignItems:"center",gap:6}}>
             <input type="range" min={1} max={5} value={f.urgency} onChange={e=>s("urgency",+e.target.value)} style={{flex:1,accentColor:UC[f.urgency]}}/>
-            <span style={{...PX,fontSize:7,color:UC[f.urgency],minWidth:10}}>{f.urgency}</span>
+            <span style={{...PX,fontSize:10,color:UC[f.urgency],minWidth:10}}>{f.urgency}</span>
           </div>
         </Lbl>
         <Lbl t={`DIFFICULTY: ${f.difficulty}/5`}>
           <div style={{display:"flex",alignItems:"center",gap:6}}>
             <input type="range" min={1} max={5} value={f.difficulty} onChange={e=>s("difficulty",+e.target.value)} style={{flex:1}}/>
-            <span style={{...PX,fontSize:7,color:C.white,minWidth:10}}>{f.difficulty}</span>
+            <span style={{...PX,fontSize:10,color:C.white,minWidth:10}}>{f.difficulty}</span>
           </div>
         </Lbl>
       </div>
       <Lbl t="RECURRING">
-        <label style={{...PX,display:"flex",alignItems:"center",gap:8,cursor:"pointer",fontSize:7,color:f.recurring?C.yellow:C.dim}}>
+        <label style={{...PX,display:"flex",alignItems:"center",gap:8,cursor:"pointer",fontSize:10,color:f.recurring?C.yellow:C.dim}}>
           <input type="checkbox" checked={f.recurring} onChange={e=>s("recurring",e.target.checked)} style={{width:"auto",accentColor:C.yellow}}/>
           RECURRING TASK
         </label>
@@ -301,16 +301,16 @@ function ProjectsTab({state,setState}){
     return(
       <div style={{display:"flex",alignItems:"center",gap:6,padding:"6px 8px",borderLeft:`3px solid ${col}`,background:C.bg3,marginBottom:2}}>
         <div style={{flex:1}}>
-          <div style={{...PX,fontSize:7,color:task.done?C.dim:C.white,textDecoration:task.done?"line-through":"none"}}>{task.title}</div>
-          <div style={{...PX,fontSize:5,color:C.dim,marginTop:4,display:"flex",gap:8,flexWrap:"wrap"}}>
+          <div style={{...PX,fontSize:10,color:task.done?C.dim:C.white,textDecoration:task.done?"line-through":"none"}}>{task.title}</div>
+          <div style={{...PX,fontSize:8,color:C.dim,marginTop:4,display:"flex",gap:8,flexWrap:"wrap"}}>
             <span style={{color:col}}>{UL[task.urgency]}</span>
             <span>{task.duration}MIN</span>
             {task.dueDate&&<span>DUE {fmtDate(task.dueDate)}</span>}
             {task.recurring&&<span style={{color:C.orange}}>↻ {task.freq.toUpperCase()}</span>}
           </div>
         </div>
-        <Btn onClick={()=>setModal({type:"editTask",pid,task})} bg={C.blueD} tc={C.white} sx={{fontSize:5,padding:"3px 6px"}}>EDIT</Btn>
-        <Btn onClick={()=>delTask(pid,task.id)} bg={C.red} tc={C.yellow} sx={{fontSize:5,padding:"3px 6px"}}>DEL</Btn>
+        <Btn onClick={()=>setModal({type:"editTask",pid,task})} bg={C.blueD} tc={C.white} sx={{fontSize:8,padding:"3px 6px"}}>EDIT</Btn>
+        <Btn onClick={()=>delTask(pid,task.id)} bg={C.red} tc={C.yellow} sx={{fontSize:8,padding:"3px 6px"}}>DEL</Btn>
       </div>
     );
   };
@@ -319,16 +319,16 @@ function ProjectsTab({state,setState}){
     <div style={{padding:14,overflowY:"auto",height:"100%"}}>
       <div style={{marginBottom:18}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
-          <span style={{...PX,fontSize:8,color:C.yellow}}>▸ STANDALONE TASKS</span>
-          <Btn onClick={()=>setModal({type:"addTask",pid:null})} bg={C.blue} sx={{fontSize:6,padding:"5px 9px"}}>+ ADD TASK</Btn>
+          <span style={{...PX,fontSize:11,color:C.yellow}}>▸ STANDALONE TASKS</span>
+          <Btn onClick={()=>setModal({type:"addTask",pid:null})} bg={C.blue} sx={{fontSize:9,padding:"5px 9px"}}>+ ADD TASK</Btn>
         </div>
-        {state.standaloneTasks.length===0&&<div style={{...PX,fontSize:6,color:C.dim,padding:"8px 0"}}>NO TASKS YET. PRESS + ADD TASK TO START.</div>}
+        {state.standaloneTasks.length===0&&<div style={{...PX,fontSize:9,color:C.dim,padding:"8px 0"}}>NO TASKS YET. PRESS + ADD TASK TO START.</div>}
         {state.standaloneTasks.map(t=><TRow key={t.id} task={t} pid={null}/>)}
       </div>
 
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
-        <span style={{...PX,fontSize:8,color:C.yellow}}>▸ PROJECTS</span>
-        <Btn onClick={()=>setModal({type:"addProject"})} bg={C.red} tc={C.yellow} sx={{fontSize:6,padding:"5px 9px"}}>+ NEW PROJECT</Btn>
+        <span style={{...PX,fontSize:11,color:C.yellow}}>▸ PROJECTS</span>
+        <Btn onClick={()=>setModal({type:"addProject"})} bg={C.red} tc={C.yellow} sx={{fontSize:9,padding:"5px 9px"}}>+ NEW PROJECT</Btn>
       </div>
 
       {state.projects.map(proj=>{
@@ -337,26 +337,26 @@ function ProjectsTab({state,setState}){
           <div key={proj.id} style={{marginBottom:16,border:`2px solid ${proj.color}22`,background:C.bg2}}>
             <div style={{background:proj.color,padding:"6px 10px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
               <div>
-                <span style={{...PX,fontSize:8,color:C.yellow}}>{proj.name}</span>
-                {proj.dueDate&&<span style={{...PX,fontSize:5,color:`${C.yellow}cc`,marginLeft:10}}>DUE {fmtDate(proj.dueDate)}</span>}
+                <span style={{...PX,fontSize:11,color:C.yellow}}>{proj.name}</span>
+                {proj.dueDate&&<span style={{...PX,fontSize:8,color:`${C.yellow}cc`,marginLeft:10}}>DUE {fmtDate(proj.dueDate)}</span>}
               </div>
               <div style={{display:"flex",gap:5,alignItems:"center"}}>
-                <span style={{...PX,fontSize:6,color:C.yellow}}>{p}%</span>
-                <Btn onClick={()=>setModal({type:"editProject",proj})} bg="rgba(0,0,0,.35)" tc={C.yellow} sx={{fontSize:5,padding:"2px 6px"}}>EDIT</Btn>
-                <Btn onClick={()=>delProj(proj.id)} bg="rgba(0,0,0,.35)" tc={C.yellow} sx={{fontSize:5,padding:"2px 6px"}}>DEL</Btn>
+                <span style={{...PX,fontSize:9,color:C.yellow}}>{p}%</span>
+                <Btn onClick={()=>setModal({type:"editProject",proj})} bg="rgba(0,0,0,.35)" tc={C.yellow} sx={{fontSize:8,padding:"2px 6px"}}>EDIT</Btn>
+                <Btn onClick={()=>delProj(proj.id)} bg="rgba(0,0,0,.35)" tc={C.yellow} sx={{fontSize:8,padding:"2px 6px"}}>DEL</Btn>
               </div>
             </div>
             <div style={{height:4,background:C.dimmer}}><div style={{height:"100%",width:`${p}%`,background:C.green,transition:"width .3s"}}/></div>
             <div style={{padding:8}}>
               {proj.tasks.map(t=><TRow key={t.id} task={t} pid={proj.id}/>)}
-              <Btn onClick={()=>setModal({type:"addTask",pid:proj.id})} bg={C.bg3} tc={C.blue} sx={{fontSize:5,padding:"5px 9px",marginTop:6,border:`1px solid ${C.blue}`}}>+ ADD TASK</Btn>
+              <Btn onClick={()=>setModal({type:"addTask",pid:proj.id})} bg={C.bg3} tc={C.blue} sx={{fontSize:8,padding:"5px 9px",marginTop:6,border:`1px solid ${C.blue}`}}>+ ADD TASK</Btn>
             </div>
           </div>
         );
       })}
 
       <div style={{marginTop:20,textAlign:"center"}}>
-        <Btn onClick={()=>{setState(prev=>({...prev,schedule:autoSchedule(prev)}));playBeep("notify");}} bg={C.orange} tc={C.bg} sx={{fontSize:8,padding:"10px 22px"}}>⚡ AUTO-SCHEDULE WEEK</Btn>
+        <Btn onClick={()=>{setState(prev=>({...prev,schedule:autoSchedule(prev)}));playBeep("notify");}} bg={C.orange} tc={C.bg} sx={{fontSize:11,padding:"10px 22px"}}>⚡ AUTO-SCHEDULE WEEK</Btn>
       </div>
 
       {modal?.type==="addTask"&&<Modal title="+ NEW TASK" onClose={()=>setModal(null)}><TaskForm onSave={t=>saveTask(modal.pid,t,null)} onClose={()=>setModal(null)}/></Modal>}
@@ -462,12 +462,12 @@ function CalendarTab({state,setState}){
           return(
             <div key={evt.id} style={{position:"absolute",top,left:2,right:2,height:ht,background:`${C.yellow}18`,borderLeft:`3px solid ${C.yellow}`,overflow:"hidden",zIndex:2,cursor:"pointer"}} onClick={()=>setModal({type:"editEvt",evt})}>
               <div style={{display:"flex",gap:3,padding:"3px 4px",alignItems:"flex-start"}}>
-                <div onClick={e=>{e.stopPropagation();toggle("event",evt.id,day);}} style={{width:11,height:11,border:`1px solid ${C.yellow}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:8,color:evt.done?C.bg:C.yellow,background:evt.done?C.yellow:"transparent",cursor:"pointer",flexShrink:0,marginTop:1}}>
+                <div onClick={e=>{e.stopPropagation();toggle("event",evt.id,day);}} style={{width:11,height:11,border:`1px solid ${C.yellow}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,color:evt.done?C.bg:C.yellow,background:evt.done?C.yellow:"transparent",cursor:"pointer",flexShrink:0,marginTop:1}}>
                   {evt.done?"✓":""}
                 </div>
                 <div>
-                  <div style={{...PX,fontSize:5,color:C.yellow,lineHeight:1.6,textDecoration:evt.done?"line-through":"none"}}>{evt.title}</div>
-                  <div style={{...PX,fontSize:4,color:`${C.yellow}88`}}>{evt.startTime} · {evt.duration}m</div>
+                  <div style={{...PX,fontSize:8,color:C.yellow,lineHeight:1.6,textDecoration:evt.done?"line-through":"none"}}>{evt.title}</div>
+                  <div style={{...PX,fontSize:7,color:`${C.yellow}88`}}>{evt.startTime} · {evt.duration}m</div>
                 </div>
               </div>
             </div>
@@ -481,12 +481,12 @@ function CalendarTab({state,setState}){
           return(
             <div key={sc.id} style={{position:"absolute",top,left:2,right:2,height:ht,background:`${col}18`,borderLeft:`3px solid ${col}`,overflow:"hidden",zIndex:1}}>
               <div style={{display:"flex",gap:3,padding:"3px 4px",alignItems:"flex-start"}}>
-                <div onClick={()=>toggle("scheduled",sc.id,day)} style={{width:11,height:11,border:`1px solid ${col}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:8,color:sc.done?C.bg:col,background:sc.done?col:"transparent",cursor:"pointer",flexShrink:0,marginTop:1}}>
+                <div onClick={()=>toggle("scheduled",sc.id,day)} style={{width:11,height:11,border:`1px solid ${col}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,color:sc.done?C.bg:col,background:sc.done?col:"transparent",cursor:"pointer",flexShrink:0,marginTop:1}}>
                   {sc.done?"✓":""}
                 </div>
                 <div>
-                  <div style={{...PX,fontSize:5,color:col,lineHeight:1.6,textDecoration:sc.done?"line-through":"none"}}>{task.title}{task.recurring?" ↻":""}</div>
-                  <div style={{...PX,fontSize:4,color:`${col}88`}}>{minToTime(sc.startMin)} · {sc.duration}m</div>
+                  <div style={{...PX,fontSize:8,color:col,lineHeight:1.6,textDecoration:sc.done?"line-through":"none"}}>{task.title}{task.recurring?" ↻":""}</div>
+                  <div style={{...PX,fontSize:7,color:`${col}88`}}>{minToTime(sc.startMin)} · {sc.duration}m</div>
                 </div>
               </div>
             </div>
@@ -500,18 +500,18 @@ function CalendarTab({state,setState}){
     <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
       {/* Week navigation */}
       <div style={{padding:"7px 14px",borderBottom:`2px solid ${C.blue}`,background:C.bg2,flexShrink:0,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-        <Btn onClick={()=>setState(p=>({...p,weekAnchor:addDays(p.weekAnchor,-7)}))} bg={C.blueD} sx={{fontSize:10,padding:"5px 10px"}}>◀</Btn>
+        <Btn onClick={()=>setState(p=>({...p,weekAnchor:addDays(p.weekAnchor,-7)}))} bg={C.blueD} sx={{fontSize:13,padding:"5px 10px"}}>◀</Btn>
         <div style={{textAlign:"center"}}>
-          <div style={{...PX,fontSize:6,color:C.yellow}}>{fmtDate(weekDates(state.weekAnchor)[0])} – {fmtDate(weekDates(state.weekAnchor)[6])}</div>
-          <div style={{...PX,fontSize:10,color:C.orange,marginTop:3}}>🔥 {streak} DAY STREAK</div>
+          <div style={{...PX,fontSize:9,color:C.yellow}}>{fmtDate(weekDates(state.weekAnchor)[0])} – {fmtDate(weekDates(state.weekAnchor)[6])}</div>
+          <div style={{...PX,fontSize:13,color:C.orange,marginTop:3}}>🔥 {streak} DAY STREAK</div>
         </div>
-        <Btn onClick={()=>setState(p=>({...p,weekAnchor:addDays(p.weekAnchor,7)}))} bg={C.blueD} sx={{fontSize:10,padding:"5px 10px"}}>▶</Btn>
+        <Btn onClick={()=>setState(p=>({...p,weekAnchor:addDays(p.weekAnchor,7)}))} bg={C.blueD} sx={{fontSize:13,padding:"5px 10px"}}>▶</Btn>
       </div>
 
       {/* Toolbar */}
       <div style={{padding:"5px 12px",borderBottom:`1px solid ${C.borderDim}`,background:C.bg2,flexShrink:0,display:"flex",gap:8,justifyContent:"flex-end"}}>
-        <Btn onClick={()=>setModal({type:"addEvt"})} bg={C.yellow} tc={C.bg} sx={{fontSize:6,padding:"5px 9px"}}>+ APPOINTMENT</Btn>
-        <Btn onClick={()=>{setState(prev=>({...prev,schedule:autoSchedule(prev)}));playBeep("notify");}} bg={C.orange} tc={C.bg} sx={{fontSize:6,padding:"5px 9px"}}>⚡ RESCHEDULE</Btn>
+        <Btn onClick={()=>setModal({type:"addEvt"})} bg={C.yellow} tc={C.bg} sx={{fontSize:9,padding:"5px 9px"}}>+ APPOINTMENT</Btn>
+        <Btn onClick={()=>{setState(prev=>({...prev,schedule:autoSchedule(prev)}));playBeep("notify");}} bg={C.orange} tc={C.bg} sx={{fontSize:9,padding:"5px 9px"}}>⚡ RESCHEDULE</Btn>
       </div>
 
       {/* Day headers */}
@@ -523,15 +523,15 @@ function CalendarTab({state,setState}){
           const perfect=state.completionLog[day]?.perfect;
           return(
             <div key={day} style={{flex:1,textAlign:"center",padding:"4px 1px",background:isToday?C.yellow:C.bg2,borderLeft:`1px solid ${C.borderDim}`}}>
-              <div style={{...PX,fontSize:5,color:isToday?C.bg:C.blue}}>{dayName(day)}</div>
-              <div style={{...PX,fontSize:8,color:isToday?C.bg:C.white}}>{day.slice(8)}</div>
-              {perfect&&<div style={{...PX,fontSize:5,color:isToday?C.bg:C.orange}}>★ PERFECT</div>}
+              <div style={{...PX,fontSize:8,color:isToday?C.bg:C.blue}}>{dayName(day)}</div>
+              <div style={{...PX,fontSize:11,color:isToday?C.bg:C.white}}>{day.slice(8)}</div>
+              {perfect&&<div style={{...PX,fontSize:8,color:isToday?C.bg:C.orange}}>★ PERFECT</div>}
               {capEdit===day
                 ?<input type="number" defaultValue={cap} min={1} max={16} step={.5} autoFocus
-                    style={{...PX,width:"100%",fontSize:6,padding:"2px",background:C.bg,color:C.white,border:`1px solid ${C.orange}`}}
+                    style={{...PX,width:"100%",fontSize:9,padding:"2px",background:C.bg,color:C.white,border:`1px solid ${C.orange}`}}
                     onBlur={e=>setDayCap(day,+e.target.value)}
                     onKeyDown={e=>{if(e.key==="Enter")setDayCap(day,+e.target.value);if(e.key==="Escape")setCapEdit(null);}}/>
-                :<div style={{...PX,fontSize:4,color:isToday?`${C.bg}aa`:C.dim,cursor:"pointer",marginTop:2}} onClick={()=>setCapEdit(day)}>
+                :<div style={{...PX,fontSize:7,color:isToday?`${C.bg}aa`:C.dim,cursor:"pointer",marginTop:2}} onClick={()=>setCapEdit(day)}>
                     {cap}h cap{state.settings.dayOverrides[day]?" ✎":""}
                   </div>
               }
@@ -545,7 +545,7 @@ function CalendarTab({state,setState}){
         <div style={{display:"flex",height:HOURS.length*HOUR_H}}>
           <div style={{width:44,flexShrink:0,position:"relative"}}>
             {HOURS.map(h=>(
-              <div key={h} style={{...PX,position:"absolute",top:(h-CAL_S)*HOUR_H-8,right:4,fontSize:5,color:C.dim,textAlign:"right"}}>
+              <div key={h} style={{...PX,position:"absolute",top:(h-CAL_S)*HOUR_H-8,right:4,fontSize:8,color:C.dim,textAlign:"right"}}>
                 {h>12?`${h-12}PM`:h===12?"12PM":`${h}AM`}
               </div>
             ))}
@@ -558,7 +558,7 @@ function CalendarTab({state,setState}){
       {modal?.type==="editEvt"&&(
         <Modal title="EDIT APPOINTMENT" onClose={()=>setModal(null)}>
           <EventForm init={modal.evt} onSave={d=>saveEvt(d,modal.evt.id)} onClose={()=>setModal(null)}/>
-          <div style={{marginTop:10}}><Btn onClick={()=>delEvt(modal.evt.id)} bg={C.red} tc={C.yellow} sx={{fontSize:6}}>DELETE APPOINTMENT</Btn></div>
+          <div style={{marginTop:10}}><Btn onClick={()=>delEvt(modal.evt.id)} bg={C.red} tc={C.yellow} sx={{fontSize:9}}>DELETE APPOINTMENT</Btn></div>
         </Modal>
       )}
     </div>
@@ -586,29 +586,29 @@ function AnalyticsTab({state}){
     <div style={{padding:16,overflowY:"auto",height:"100%"}}>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginBottom:18}}>
         <div style={{background:C.bg2,border:`2px solid ${C.orange}`,padding:14,textAlign:"center"}}>
-          <div style={{...PX,fontSize:6,color:C.dim,marginBottom:6}}>CURRENT STREAK</div>
-          <div style={{...PX,fontSize:32,color:C.orange}}>{streak}</div>
-          <div style={{...PX,fontSize:6,color:C.dim,marginTop:4}}>PERFECT DAYS</div>
+          <div style={{...PX,fontSize:9,color:C.dim,marginBottom:6}}>CURRENT STREAK</div>
+          <div style={{...PX,fontSize:70,color:C.orange}}>{streak}</div>
+          <div style={{...PX,fontSize:9,color:C.dim,marginTop:4}}>PERFECT DAYS</div>
         </div>
         <div style={{background:C.bg2,border:`2px solid ${C.yellow}`,padding:14}}>
-          <div style={{...PX,fontSize:6,color:C.dim,marginBottom:8}}>LAST 14 DAYS</div>
+          <div style={{...PX,fontSize:9,color:C.dim,marginBottom:8}}>LAST 14 DAYS</div>
           <div style={{display:"flex",gap:3,flexWrap:"wrap"}}>
             {last14.map(d=><div key={d} title={d} style={{width:15,height:15,background:state.completionLog[d]?.perfect?C.orange:C.dimmer,border:`1px solid ${C.dim}`}}/>)}
           </div>
-          <div style={{...PX,fontSize:5,color:C.dim,marginTop:6}}>{perf14} / 14 PERFECT</div>
+          <div style={{...PX,fontSize:8,color:C.dim,marginTop:6}}>{perf14} / 14 PERFECT</div>
         </div>
       </div>
 
       <div style={{marginBottom:18}}>
-        <div style={{...PX,fontSize:7,color:C.yellow,marginBottom:10}}>▸ WEEKLY COMPLETION</div>
+        <div style={{...PX,fontSize:10,color:C.yellow,marginBottom:10}}>▸ WEEKLY COMPLETION</div>
         {weeks.map(w=>(
           <div key={w.label} style={{marginBottom:8}}>
-            <div style={{display:"flex",justifyContent:"space-between",...PX,fontSize:5,color:C.dim,marginBottom:3}}>
+            <div style={{display:"flex",justifyContent:"space-between",...PX,fontSize:8,color:C.dim,marginBottom:3}}>
               <span>{w.label}</span><span>{w.done}/{w.total} · {w.pct}%</span>
             </div>
             <div style={{height:14,background:C.dimmer,position:"relative"}}>
               <div style={{height:"100%",width:`${w.pct}%`,background:w.pct>=80?C.green:w.pct>=50?C.blue:C.red,transition:"width .4s"}}/>
-              <div style={{...PX,position:"absolute",right:4,top:2,fontSize:5,color:C.white}}>{w.pct}%</div>
+              <div style={{...PX,position:"absolute",right:4,top:2,fontSize:8,color:C.white}}>{w.pct}%</div>
             </div>
           </div>
         ))}
@@ -616,13 +616,13 @@ function AnalyticsTab({state}){
 
       {state.projects.length>0&&(
         <div style={{marginBottom:18}}>
-          <div style={{...PX,fontSize:7,color:C.yellow,marginBottom:10}}>▸ PROJECT PROGRESS</div>
+          <div style={{...PX,fontSize:10,color:C.yellow,marginBottom:10}}>▸ PROJECT PROGRESS</div>
           {state.projects.map(p=>{
             const done=p.tasks.filter(t=>t.done).length;
             const pct=p.tasks.length?Math.round(done/p.tasks.length*100):0;
             return(
               <div key={p.id} style={{marginBottom:8}}>
-                <div style={{display:"flex",justifyContent:"space-between",...PX,fontSize:5,marginBottom:3}}>
+                <div style={{display:"flex",justifyContent:"space-between",...PX,fontSize:8,marginBottom:3}}>
                   <span style={{color:p.color}}>{p.name}</span><span style={{color:C.dim}}>{done}/{p.tasks.length}</span>
                 </div>
                 <div style={{height:14,background:C.dimmer}}><div style={{height:"100%",width:`${pct}%`,background:p.color,transition:"width .4s"}}/></div>
@@ -633,13 +633,13 @@ function AnalyticsTab({state}){
       )}
 
       <div style={{marginBottom:18}}>
-        <div style={{...PX,fontSize:7,color:C.yellow,marginBottom:10}}>▸ OPEN TASKS BY URGENCY</div>
+        <div style={{...PX,fontSize:10,color:C.yellow,marginBottom:10}}>▸ OPEN TASKS BY URGENCY</div>
         <div style={{display:"flex",gap:5,alignItems:"flex-end",height:90}}>
           {openByU.map(({u,count})=>(
             <div key={u} style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",gap:4}}>
-              <div style={{...PX,fontSize:6,color:UC[u]}}>{count}</div>
+              <div style={{...PX,fontSize:9,color:UC[u]}}>{count}</div>
               <div style={{width:"100%",height:(count/maxU)*72,background:UC[u],minHeight:count?4:0}}/>
-              <div style={{...PX,fontSize:4,color:C.dim}}>{UL[u].slice(0,3)}</div>
+              <div style={{...PX,fontSize:7,color:C.dim}}>{UL[u].slice(0,3)}</div>
             </div>
           ))}
         </div>
@@ -652,8 +652,8 @@ function AnalyticsTab({state}){
           {label:"OVERDUE",val:allTasks.filter(t=>!t.done&&t.dueDate&&t.dueDate<today()).length,col:C.red},
         ].map(s=>(
           <div key={s.label} style={{background:C.bg2,border:`2px solid ${s.col}`,padding:10,textAlign:"center"}}>
-            <div style={{...PX,fontSize:5,color:C.dim,marginBottom:6}}>{s.label}</div>
-            <div style={{...PX,fontSize:22,color:s.col}}>{s.val}</div>
+            <div style={{...PX,fontSize:8,color:C.dim,marginBottom:6}}>{s.label}</div>
+            <div style={{...PX,fontSize:28,color:s.col}}>{s.val}</div>
           </div>
         ))}
       </div>
@@ -678,7 +678,7 @@ function NowBar({state}){
   const nxt=items.find(i=>i.start>nowMin);
   if(!cur&&!nxt)return null;
   return(
-    <div style={{background:"#090400",borderBottom:`2px solid ${C.orange}`,padding:"6px 14px",...PX,fontSize:6,color:C.orange,display:"flex",alignItems:"center",gap:10,flexShrink:0}}>
+    <div style={{background:"#090400",borderBottom:`2px solid ${C.orange}`,padding:"6px 14px",...PX,fontSize:9,color:C.orange,display:"flex",alignItems:"center",gap:10,flexShrink:0}}>
       <span style={{animation:"blink .8s step-end infinite"}}>▶</span>
       {cur?<>NOW: <span style={{color:C.yellow,marginLeft:5}}>{cur.name}</span></>:<span style={{color:C.dim}}>IDLE</span>}
       {nxt&&<><span style={{color:C.dim,margin:"0 8px"}}>|</span><span style={{color:C.dim}}>NEXT {minToTime(nxt.start)}:</span><span style={{color:C.white,marginLeft:5}}>{nxt.name}</span></>}
@@ -695,7 +695,7 @@ function Settings({settings,onSave,onClose}){
       <Lbl t="WORK START HOUR (0-23)"><Inp type="number" value={f.sh} min={0} max={23} onChange={e=>s("sh",+e.target.value)}/></Lbl>
       <Lbl t="WORK END HOUR (1-24)"><Inp type="number" value={f.eh} min={1} max={24} onChange={e=>s("eh",+e.target.value)}/></Lbl>
       <Lbl t="DEFAULT MAX HRS/DAY"><Inp type="number" value={f.max} min={1} max={16} step={.5} onChange={e=>s("max",+e.target.value)}/></Lbl>
-      <div style={{...PX,fontSize:6,color:C.dim,marginBottom:14,lineHeight:2.2}}>
+      <div style={{...PX,fontSize:9,color:C.dim,marginBottom:14,lineHeight:2.2}}>
         TIP: CLICK ANY DAY HEADER IN CALENDAR TO OVERRIDE THAT DAY'S CAP
       </div>
       <div style={{display:"flex",gap:8}}>
@@ -706,8 +706,55 @@ function Settings({settings,onSave,onClose}){
   );
 }
 
+// ── Auth ──────────────────────────────────────────────────────────────────────
+// Change this to whatever password you want:
+const PASSWORD = "arcade123";
+const AUTH_KEY = "arcadePlannerAuth";
+
+function LoginScreen({onUnlock}){
+  const[pw,setPw]=useState("");
+  const[err,setErr]=useState(false);
+  const[shake,setShake]=useState(false);
+
+  const attempt=()=>{
+    if(pw===PASSWORD){
+      localStorage.setItem(AUTH_KEY,"1");
+      onUnlock();
+    } else {
+      setErr(true);
+      setShake(true);
+      setPw("");
+      playBeep("warn");
+      setTimeout(()=>setShake(false),500);
+    }
+  };
+
+  return(
+    <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",height:"100vh",background:C.bg,gap:24}}>
+      <div style={{...PX,fontSize:18,color:C.red,letterSpacing:6,textAlign:"center"}}>ARCADE</div>
+      <div style={{...PX,fontSize:10,color:C.yellow,letterSpacing:3,marginTop:-18}}>PLANNER v1.0</div>
+      <div style={{border:`3px solid ${C.blue}`,background:C.bg2,padding:"28px 32px",maxWidth:320,width:"90%",animation:shake?"shake .4s ease":"none"}}>
+        <div style={{...PX,fontSize:10,color:C.yellow,marginBottom:18,textAlign:"center"}}>▸ ENTER PASSWORD</div>
+        <Inp
+          type="password"
+          value={pw}
+          onChange={e=>{setPw(e.target.value);setErr(false);}}
+          onKeyDown={e=>e.key==="Enter"&&attempt()}
+          placeholder="password..."
+          autoFocus
+          style={{marginBottom:14}}
+        />
+        {err&&<div style={{...PX,fontSize:9,color:C.red,marginBottom:12,textAlign:"center"}}>WRONG PASSWORD</div>}
+        <Btn onClick={attempt} bg={C.red} tc={C.yellow} sx={{width:"100%",padding:"10px",fontSize:11}}>UNLOCK</Btn>
+      </div>
+      <style>{`@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}`}</style>
+    </div>
+  );
+}
+
 // ── App root ──────────────────────────────────────────────────────────────────
 function App(){
+  const[authed,setAuthed]=useState(()=>localStorage.getItem(AUTH_KEY)==="1");
   const[state,setRaw]=useState(loadState);
   const[tab,setTab]=useState("CALENDAR");
   const[showSettings,setShowSettings]=useState(false);
@@ -718,10 +765,13 @@ function App(){
   }),[]);
 
   useEffect(()=>{
+    if(!authed)return;
     if(!state.schedule.length)setState(prev=>({...prev,schedule:autoSchedule(prev)}));
     // Request notification permission on load
     if("Notification"in window&&Notification.permission==="default")Notification.requestPermission();
-  },[]);
+  },[authed]);
+
+  if(!authed) return <LoginScreen onUnlock={()=>setAuthed(true)}/>;
 
   const TABS=["PROJECTS","CALENDAR","ANALYTICS"];
 
@@ -730,17 +780,20 @@ function App(){
       {/* Header / nav */}
       <div style={{background:C.bg2,borderBottom:`3px solid ${C.blue}`,padding:"8px 16px",display:"flex",justifyContent:"space-between",alignItems:"center",flexShrink:0}}>
         <div>
-          <div style={{...PX,fontSize:12,color:C.red,letterSpacing:4}}>ARCADE</div>
-          <div style={{...PX,fontSize:6,color:C.yellow,letterSpacing:2,marginTop:2}}>PLANNER v1.0</div>
+          <div style={{...PX,fontSize:16,color:C.red,letterSpacing:4}}>ARCADE</div>
+          <div style={{...PX,fontSize:9,color:C.yellow,letterSpacing:2,marginTop:2}}>PLANNER v1.0</div>
         </div>
         <div style={{display:"flex"}}>
           {TABS.map(t=>(
-            <button key={t} onClick={()=>setTab(t)} style={{...PX,background:tab===t?C.red:"transparent",color:tab===t?C.yellow:C.dim,border:`2px solid ${tab===t?C.red:C.dimmer}`,fontSize:7,padding:"7px 13px",cursor:"pointer"}}>
+            <button key={t} onClick={()=>setTab(t)} style={{...PX,background:tab===t?C.red:"transparent",color:tab===t?C.yellow:C.dim,border:`2px solid ${tab===t?C.red:C.dimmer}`,fontSize:10,padding:"7px 13px",cursor:"pointer"}}>
               {t}
             </button>
           ))}
         </div>
-        <button onClick={()=>setShowSettings(true)} style={{...PX,background:"none",border:`2px solid ${C.dim}`,color:C.dim,fontSize:8,padding:"5px 9px",cursor:"pointer"}}>⚙</button>
+        <div style={{display:"flex",gap:8,alignItems:"center"}}>
+          <button onClick={()=>setShowSettings(true)} style={{...PX,background:"none",border:`2px solid ${C.dim}`,color:C.dim,fontSize:11,padding:"5px 9px",cursor:"pointer"}}>⚙</button>
+          <button onClick={()=>{localStorage.removeItem(AUTH_KEY);setAuthed(false);}} style={{...PX,background:"none",border:`2px solid ${C.dim}`,color:C.dim,fontSize:11,padding:"5px 9px",cursor:"pointer"}}>🔒</button>
+        </div>
       </div>
 
       <NowBar state={state}/>
@@ -751,8 +804,6 @@ function App(){
         {tab==="ANALYTICS"&&<AnalyticsTab state={state}/>}
       </div>
 
-      {/* CRT scanline overlay */}
-      <div style={{position:"fixed",inset:0,pointerEvents:"none",backgroundImage:"repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.07) 2px,rgba(0,0,0,0.07) 4px)",zIndex:9999}}/>
 
       {showSettings&&(
         <Settings settings={state.settings}
